@@ -1,6 +1,6 @@
 <#
 .DESCRIPTION
-This script updates app group users based on a Windows AD security gorup
+This script updates an app group users based on a Windows AD security gorup
 Tested with Windows AD only, not Azure AD
 
 .PARAMETER adGroupName
@@ -49,7 +49,8 @@ foreach ($module in $reqModule) {
 }
 
 # Verify the user is logged in
-if ((Get-RdsContext -ErrorAction Stop) -eq $null) {
+$rdsContext = get-rdscontext -ErrorAction SilentlyContinue
+if ($rdsContext -eq $null) {
     try {
         Write-host "Use the login window to connect to WVD" -ForegroundColor Red
         Add-RdsAccount -ErrorAction Stop -DeploymentUrl "https://rdbroker.wvd.microsoft.com"
@@ -61,7 +62,7 @@ if ((Get-RdsContext -ErrorAction Stop) -eq $null) {
     }
 }
 
-# Create user list and app group list array
+# Create user list and target list array
 $adGroupUsers = @()
 $appGroupUsers = @()
 
