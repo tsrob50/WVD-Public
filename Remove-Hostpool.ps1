@@ -51,16 +51,16 @@ catch {
     Exit
 }
 if ($hostPools -ne $null) {
-$message = 'Select the Host Pool'
-$question = "Please type the name of the Host Pool to remove"
-$choices = @()
-For ($index = 0; $index -lt $hostPools.Count; $index++) {
-    $choices += New-Object System.Management.Automation.Host.ChoiceDescription ($hostPools[$index]).HostPoolName
-}
+    $message = 'Select the Host Pool'
+    $question = "Please type the name of the Host Pool to remove"
+    $choices = @()
+    For ($index = 0; $index -lt $hostPools.Count; $index++) {
+        $choices += New-Object System.Management.Automation.Host.ChoiceDescription ($hostPools[$index]).HostPoolName
+    }
 
-$options = [System.Management.Automation.Host.ChoiceDescription[]]$choices
-$result = $host.ui.PromptForChoice($message, $question, $options, 0) 
-$hostPoolName = ($hostPools[$result]).HostPoolName
+    $options = [System.Management.Automation.Host.ChoiceDescription[]]$choices
+    $result = $host.ui.PromptForChoice($message, $question, $options, 0) 
+    $hostPoolName = ($hostPools[$result]).HostPoolName
 }
 else { 
     write-host 'No Host Pools found, exiting script.'
@@ -85,7 +85,7 @@ if ($decision -eq 0) {
         $appGroups = Get-RdsAppGroup -TenantName $tenantName -HostPoolName $hostPoolName
         foreach ($appGroup in $appGroups) {
             $appGroupName = $appGroup.AppGroupName
-            write-host "Removing Users from App Group $appGroup"
+            write-host "Removing Users from App Group $appGroupName"
             try {
                 Get-RdsAppGroupUser -ErrorAction Stop -TenantName $tenantName -HostPoolName $hostPoolName -AppGroupName $appGroupName | Remove-RdsAppGroupUser
             }
@@ -93,6 +93,18 @@ if ($decision -eq 0) {
                 $ErrorMessage = $_.Exception.message
                 write-error ('Error removing App Group User ' + $ErrorMessage)
             }
+            # Code to remove remote apps
+            try {
+                if ($appGroup.ResourceType -eq "RemoteApp") {
+                    write-host "Removing published apps from $appGroupName"
+                    get-RdsRemoteApp -TenantName $tenantName -HostPoolName $hostpoolname -AppGroupName $appGroupName | Remove-RdsRemoteApp
+                }
+            }
+            catch {
+                $ErrorMessage = $_.Exception.message
+                write-error ("Error removing Remote App $appGroupName " + $ErrorMessage)
+            }
+            #####
             write-host "Removing $appGroupName"
             try {
                 Remove-RdsAppGroup -ErrorAction Stop -TenantName $tenantName -HostPoolName $hostPoolName -Name $appGroupName
@@ -102,32 +114,31 @@ if ($decision -eq 0) {
                 write-error ("Error removing app group $appGroupName " + $ErrorMessage)
             }
         }
-            Write-Host "Removing Session Hosts from Host Pool $hostPoolName"
-            try {
-                Get-RdsSessionHost -ErrorAction Stop -TenantName $tenantName -HostPoolName $hostPoolName | Remove-RdsSessionHost
-            }
-            catch {
-                $ErrorMessage = $_.Exception.message
-                write-error ('Error removing Session Hosts ' + $ErrorMessage)
-                Break
-            }
-            Write-Host "Removing Host Pool $hostPoolName"
-            write-host "This script will not remove servers from Azure or Active Directory"
-            try {
-                Remove-RdsHostPool -ErrorAction Stop -TenantName $tenantName -HostPoolName $hostPoolName
-            }
-            catch {
-                $ErrorMessage = $_.Exception.message
-                write-error ('Error removing host pool ' + $ErrorMessage)
-                Break
-            }
-    }
-        else {
-            Write-Host 'Removal canceled'
-            exit
+        Write-Host "Removing Session Hosts from Host Pool $hostPoolName"
+        try {
+            Get-RdsSessionHost -ErrorAction Stop -TenantName $tenantName -HostPoolName $hostPoolName | Remove-RdsSessionHost
+        }
+        catch {
+            $ErrorMessage = $_.Exception.message
+            write-error ('Error removing Session Hosts ' + $ErrorMessage)
+            Break
+        }
+        Write-Host "Removing Host Pool $hostPoolName"
+        try {
+            Remove-RdsHostPool -ErrorAction Stop -TenantName $tenantName -HostPoolName $hostPoolName
+        }
+        catch {
+            $ErrorMessage = $_.Exception.message
+            write-error ('Error removing host pool ' + $ErrorMessage)
+            Break
         }
     }
     else {
         Write-Host 'Removal canceled'
         exit
     }
+}
+else {
+    Write-Host 'Removal canceled'
+    exit
+}
