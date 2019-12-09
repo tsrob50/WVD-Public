@@ -17,7 +17,7 @@
     Credential object in Azure Automation with Service Principle username and Password
     Set a GPO for the session hosts to log out disconnected and idle sessions
     Full details can be found at:
-    www.ciraltos.com
+    https://www.ciraltos.com/automatically-start-and-stop-wvd-vms-with-azure-automation/
 .NOTES
     Script is offered as-is with no warranty, expressed or implied.
     Test it before you trust it
