@@ -4,7 +4,7 @@
 .DESCRIPTION
     This script is intended to automatically start and stop session hosts in a Windows Virtual Desktop
     host pool based on the number of users.  
-    The script determines the number of Session Hosts that should be running by adding the number of session 
+    The script determines the number of Session Hosts that should be running by adding the number of sessions 
     in the pool to a threshold. The threshold is the number of sessions available between each script run
     to accommodate new connections.  Those two numbers are added and divided by the maximum sessions per host.  
     The maximum session is set in the depth-first load balancing settings.  
@@ -12,7 +12,7 @@
     that should be available compared to the number of hosts that are running.
 
     Requirements:
-     WVD Host Pool must be set to Depth First
+    WVD Host Pool must be set to Depth First
     An Azure Function App
         Use System Assigned Managed ID
         Give contributor rights for the Session Host VM Resource Group to the Managed ID
@@ -21,7 +21,7 @@
         az.desktopvirtualization
     For best results set a GPO to log out disconnected and idle sessions
     Full details can be found at:
-    ## FIX WHEN PUBLISHED ## https://www.ciraltos.com/automatically-start-and-stop-wvd-vms-with-azure-automation/
+    https://www.ciraltos.com/auto-start-and-stop-session-hosts-in-windows-virtual-desktop-spring-update-arm-edition-with-an-azure-function/
 .NOTES
     Script is offered as-is with no warranty, expressed or implied.
     Test it before you trust it
