@@ -170,6 +170,7 @@ if ($usePeak -eq "yes") {
     $date = [System.TimeZoneInfo]::ConvertTimeFromUtc($utcDate, $tZ)
     write-verbose "Date and Time"
     write-verbose $date
+    $utcOffset = $tz.BaseUtcOffset.TotalHours
     $dateDay = (((get-date).ToUniversalTime()).AddHours($utcOffset)).dayofweek
     Write-Verbose $dateDay
     $startPeakTime = get-date $startPeakTime
