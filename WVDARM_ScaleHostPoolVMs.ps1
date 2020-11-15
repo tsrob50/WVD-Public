@@ -26,10 +26,11 @@
     Script is offered as-is with no warranty, expressed or implied.
     Test it before you trust it
     Author      : Travis Roberts
-    Contributor : Kandice Hendricks
+    Contributor : Kandice Hendricks, Jurjen Atsma
     Website     : www.ciraltos.com & https://www.greenpages.com/
-    Version     : 1.0.0.0 Initial Build for WVD ARM.  Adapted from previous start-stop script for WVD Fall 2019
-                    Updated for new az.desktopvirtulization PowerShell module and to run as a Function App
+    Version     : 1.0.0.1 Bug bux and add "Shutdown" as a status of Session Hosts available to start
+                  1.0.0.0 Initial Build for WVD ARM.  Adapted from previous start-stop script for WVD Fall 2019
+                  Updated for new az.desktopvirtulization PowerShell module and to run as a Function App
 #>
 
 
@@ -73,7 +74,7 @@ Function Start-SessionHost {
     )
 
     # Number of off session hosts accepting connections
-    $offSessionHosts = $sessionHosts | Where-Object { $_.Status -eq "Unavailable" }
+    $offSessionHosts = $sessionHosts | Where-Object { $_.Status -eq "Unavailable" -or $_.Status -eq "Shutdown" }
     $offSessionHostsCount = $offSessionHosts.count
     Write-Verbose "Off Session Hosts $offSessionHostsCount"
     Write-Verbose ($offSessionHosts | Out-String)
@@ -83,7 +84,7 @@ Function Start-SessionHost {
     }
     else {
         if ($hostsToStart -gt $offSessionHostsCount) {
-            $hostsToStart = $offSessionHosts
+            $hostsToStart = $offSessionHostsCount
         }
         Write-Verbose "Conditions met to start a host"
         $counter = 0
