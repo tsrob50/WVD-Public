@@ -30,7 +30,7 @@
 .NOTES
     Script is offered as-is with no warranty, expressed or implied.
     Test it before you trust it
-    Author      : Travis Roberts
+    Author      : Travis Roberts, Ciraltos llc
     Contributor : Kandice Hendricks, Jurjen Atsma
     Website     : www.ciraltos.com & https://www.greenpages.com/
     Version     : 1.1.0.0 Added option for Breadth-First load balancing during peak hours.  
