@@ -15,4 +15,6 @@ Remove-Hostpool.ps1 - Walks the user through removing a host pool from WDS
 
 StartStop-HostPoolVMs - Starts and Stops hosts in a host pool based on user load (Fall 2019 version)
 
+StopSH-MultiHostPools.ps1 - Used with auto start on connect to stop unused session hosts
+
 WVDARM_ScaleHostPoolVMs.ps1 - Start and stop session host based on user sessions.  Updated for WVD Spring Update, WVD ARM.
