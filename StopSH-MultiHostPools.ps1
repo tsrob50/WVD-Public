@@ -70,7 +70,7 @@ while ($count -lt $allHostPools.Count) {
     # Get the Session Hosts
     # Exclude servers in drain mode and do not allow new connections
     $runningSessionHosts = (Get-AzWvdSessionHost -HostPoolName $Pool -ResourceGroupName $PoolRg | Where-Object { $_.AllowNewSession -eq $true } )
-    $availableSessionHosts = ($runningSessionHosts | Where-Object { $_.Status -eq "Available" })
+    $availableSessionHosts = ($runningSessionHosts | Where-Object { $_.Status -eq "Available" -or "Stopped" })
     #Evaluate the list of running session hosts against 
     foreach ($sessionHost in $availableSessionHosts) {
         $sessionHostName = (($sessionHost).name -split { $_ -eq '.' -or $_ -eq '/' })[1]
