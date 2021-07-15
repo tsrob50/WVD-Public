@@ -25,7 +25,8 @@
     Test it before you trust it
     Author      : Travis Roberts, Ciraltos llc
     Website     : www.ciraltos.com
-    Version     :1.1.0.0 Add support for pooled host pools and multiple pooled and/or personal host pools 
+    Version     :1.1.1.0 Update error handling to prevent shut down of session hosts with active connections
+                 1.1.0.0 Add support for pooled host pools and multiple pooled and/or personal host pools 
                  1.0.0.0 Initial Build
 #>
 
@@ -59,7 +60,15 @@ while ($count -lt $allHostPools.Count) {
     Write-Output "This is the key (pool) $pool"
     write-output "this is the value (rg) $poolRg"
     # Get the active Session hosts
-    $activeShs = (Get-AzWvdUserSession -HostPoolName $pool -ResourceGroupName $poolRg).name
+    try {
+        $activeShs = (Get-AzWvdUserSession -ErrorAction Stop -HostPoolName $pool -ResourceGroupName $poolRg).name
+    }
+    catch {
+        $ErrorMessage = $_.Exception.message
+        Write-Error ("Error getting a list of user sessions: " + $ErrorMessage)
+        Break
+    }
+    
     $allActive = @()
     foreach ($activeSh in $activeShs) {
         $activeSh = ($activeSh -split { $_ -eq '.' -or $_ -eq '/' })[1]
@@ -69,7 +78,14 @@ while ($count -lt $allHostPools.Count) {
     }
     # Get the Session Hosts
     # Exclude servers in drain mode and do not allow new connections
-    $runningSessionHosts = (Get-AzWvdSessionHost -HostPoolName $Pool -ResourceGroupName $PoolRg | Where-Object { $_.AllowNewSession -eq $true } )
+    try {
+        $runningSessionHosts = (Get-AzWvdSessionHost -ErrorAction Stop -HostPoolName $Pool -ResourceGroupName $PoolRg | Where-Object { $_.AllowNewSession -eq $true } )
+    }
+    catch {
+        $ErrorMessage = $_.Exception.message
+        Write-Error ("Error getting a list of running session hosts: " + $ErrorMessage)
+        Break
+    }
     $availableSessionHosts = ($runningSessionHosts | Where-Object { $_.Status -eq "Available" })
     #Evaluate the list of running session hosts against 
     foreach ($sessionHost in $availableSessionHosts) {
