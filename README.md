@@ -21,3 +21,4 @@ StopSH-MultiHostPools.ps1 - Used with auto start on connect to stop unused sessi
 
 WVDARM_ScaleHostPoolVMs.ps1 - Start and stop session host based on user sessions.  Updated for WVD Spring Update, WVD ARM
 
+SnapImage.ps1 & SysprepCSE.ps1 - Script and Custom Script Extension, Use PowerShell to Create a Snapshot Based Image of an Azure Virtual Machine
