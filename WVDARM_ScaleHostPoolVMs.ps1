@@ -159,7 +159,7 @@ function Stop-SessionHost {
 
 # Get Host Pool 
 try {
-    $hostPool = Get-AzWvdHostPool -ResourceGroupName $hostPoolRg -HostPoolName $hostPoolName 
+    $hostPool = Get-AzWvdHostPool -ResourceGroupName $hostPoolRg -Name $hostPoolName 
     Write-Verbose "HostPool:"
     Write-Verbose $hostPool.Name
 }
