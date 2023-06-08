@@ -5,6 +5,8 @@ This script will not remove the Session Host VM's from Azure.
 Script check that the user is logged in, runs the log in command if not.
 This script is offered as is with no warranty.
 Test it before you trust it.
+Requires the RDS PowerShell Modules
+Download here https://learn.microsoft.com/en-us/powershell/windows-virtual-desktop/overview
 
 .NOTES
 Author      : Travis Roberts
