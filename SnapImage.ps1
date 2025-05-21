@@ -89,7 +89,7 @@
     .\SnapImage.ps1 -refVmName "<ComputerName>" -refVmRg '<RGName>'   
 
     Create an image and add it to an Azure Compute Gallery:
-    .\SnapImage.ps1 -refVmName "CITTest" -refVmRg 'AAWPNCITImageTestRG' -galName 'CITGallery1' -galRg 'CITGalleryRG' -galDefName 'SnapImage'
+    .\SnapImage.ps1 -refVmName "<ReferenceComputerName>" -refVmRg '<ResourceGroupName>' -galName '<ACGName>' -galRg '<ACGResourceGroupName>' -galDefName '<ACGImageDefinitionName>'
 #>
 
 [CmdletBinding()]
