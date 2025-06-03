@@ -55,7 +55,7 @@
     This option is required for trusted launch images.  The image definition must be created before running the script.
 
 .PARAMETER galRg
-    Required if -galDeploy is used.  The name of the Azure Compute Gallery Resource Group.
+    Required if -galName is used.  The name of the Azure Compute Gallery Resource Group.
     
 .PARAMETER galDefName
     Required if -galName is used. The Image Definition name in the Azure Compute Gallery
